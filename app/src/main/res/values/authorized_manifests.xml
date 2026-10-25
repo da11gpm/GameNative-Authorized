@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="authorized_app_name" translatable="false">GameNative Authorized</string>
+    <string name="authorized_manifests_title">LuaTools · local manifests</string>
+    <string name="authorized_manifests_description">Import a local LuaTools .lua file to select public manifest versions for a game in your Steam library. Keys in the file are discarded. Steam must authorize each depot and manifest. References stay active until removed; Verify always checks the installed version. Import replaces the references for this AppID.</string>
+    <string name="authorized_manifests_consent">I am authorized to use this manifest and content.</string>
+    <string name="authorized_manifests_import">Import .lua file</string>
+    <string name="authorized_manifests_clear">Remove references for this AppID</string>
+    <string name="authorized_manifests_saved">Saved %1$d depot references for AppID %2$d.</string>
+    <string name="authorized_manifests_removed">Removed references for AppID %1$d.</string>
+    <string name="authorized_manifests_error">Could not apply manifest: %1$s</string>
+</resources>

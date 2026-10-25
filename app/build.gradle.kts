@@ -56,7 +56,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "app.gamenative"
+        applicationId = "app.gamenative.authorized"
 
         minSdk = 26
 
@@ -65,7 +65,7 @@ android {
         buildConfigField("boolean", "MODERN_XR", "false")
 
         versionCode = 24
-        versionName = "1.4.0"
+        versionName = "1.4.0-authorized.1"
 
         buildConfigField("boolean", "GOLD", "false")
         fun secret(name: String) =

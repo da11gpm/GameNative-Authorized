@@ -150,6 +150,14 @@ private fun SettingsScreenContent(
                     SettingsGroupAccounts()
                 }
 
+                SettingsSection(
+                    title = stringResource(R.string.authorized_manifests_title),
+                    icon = Icons.Default.Settings,
+                    iconTint = PluviaTheme.colors.accentCyan,
+                ) {
+                    SettingsGroupAuthorizedManifests()
+                }
+
                 // Performance section
                 SettingsSection(
                     title = stringResource(R.string.settings_performance_title),

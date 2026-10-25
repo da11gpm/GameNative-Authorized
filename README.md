@@ -1,5 +1,11 @@
 <div align="center">
 
+# GameNative Authorized
+
+Fork with a local, authorized LuaTools manifest-reference importer. See [integration details, limits, and build instructions](docs/AUTHORIZED_MANIFESTS.md).
+
+Based on GameNative master dc24544101ef53543614041d7a8d8af68738090a.
+
 # GameNative
 
 **Play the PC games you already own — from Steam, Epic and GOG — on your Android device, with cloud saves.**

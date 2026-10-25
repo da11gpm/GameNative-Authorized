@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="authorized_manifests_title">LuaTools · manifiestos locales</string>
+    <string name="authorized_manifests_description">Importa un archivo .lua local de LuaTools para elegir versiones de manifiestos públicos de un juego de tu biblioteca de Steam. Las claves del archivo se descartan. Steam debe autorizar cada depósito y manifiesto. Las referencias siguen activas hasta que las elimines; Verificar comprueba siempre la versión instalada. Importar reemplaza las referencias de este AppID.</string>
+    <string name="authorized_manifests_consent">Tengo autorización para usar este manifiesto y su contenido.</string>
+    <string name="authorized_manifests_import">Importar archivo .lua</string>
+    <string name="authorized_manifests_clear">Eliminar referencias de este AppID</string>
+    <string name="authorized_manifests_saved">Guardadas %1$d referencias de depósitos del AppID %2$d.</string>
+    <string name="authorized_manifests_removed">Referencias del AppID %1$d eliminadas.</string>
+    <string name="authorized_manifests_error">No se pudo aplicar el manifiesto: %1$s</string>
+</resources>

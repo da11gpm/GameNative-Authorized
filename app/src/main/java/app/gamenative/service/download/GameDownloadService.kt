@@ -1,5 +1,6 @@
 package app.gamenative.service.download
 
+import app.gamenative.luatools.AuthorizedManifestStore
 import app.gamenative.data.DepotInfo
 import app.gamenative.R
 import app.gamenative.data.DownloadInfo
@@ -111,6 +112,15 @@ object GameDownloadService {
         val steamContent = steamClient.getHandler(SteamContent::class.java)
             ?: throw DownloadFailedException("SteamContent handler not available")
 
+        // Local references only choose a public manifest version. The existing Steam
+        // depot-key and manifest-request-code checks below still authorize every depot.
+        // VERIFY always uses the recorded installed build; other branches are unaffected.
+        val manifestPins = if (branch == "public" && mode != SteamDownloadMode.VERIFY) {
+            AuthorizedManifestStore.loadForDownload(checkNotNull(SteamService.instance), appId)
+        } else {
+            emptyMap()
+        }
+
         // ── 1. Resolve the CDN server list (JavaSteam CM call) ──────────────────
         val servers = resolveCdnServers(steamContent, parentScope)
         if (servers.isEmpty()) throw DownloadFailedException("No CDN servers available")
@@ -123,7 +133,7 @@ object GameDownloadService {
                 async {
                     resolveDepotForDownload(
                         steamApps, steamContent, appId, depotId, depot, branch, branchPassword,
-                        mode, installedGids, parentScope,
+                        mode, installedGids, parentScope, manifestPins[depotId],
                     )
                 }
             }.awaitAll()
@@ -611,6 +621,7 @@ object GameDownloadService {
         mode: SteamDownloadMode,
         installedGids: Map<Int, ULong>,
         parentScope: CoroutineScope,
+        manifestPin: ULong?,
     ): DepotResolution {
         // VERIFY pins to the manifest the app recorded as installed — never PICS' current one, so
         // verifying repairs the build the user has instead of silently upgrading it. The request
@@ -627,7 +638,8 @@ object GameDownloadService {
             }
             installed
         } else {
-            val current = resolveManifestGid(steamApps, appId, depotId, depot, branch, branchPassword)
+            val current = manifestPin?.toLong()
+                ?: resolveManifestGid(steamApps, appId, depotId, depot, branch, branchPassword)
             // UPDATE: a depot whose current manifest IS the installed one has nothing to do. It is
             // still selected (so its files stay checked when something else in it changed), but
             // walking it would re-hash the whole depot against the very manifest it already
@@ -680,7 +692,9 @@ object GameDownloadService {
         val requestCode = requestManifestCode(
             steamContent, depotId, gid, branch, owningAppId, appId, parentScope,
         )
-        if (requestCode == 0L) {
+        if (requestCode == 0L || (manifestPin != null && requestCode == null)) {
+            // Imported references require an explicit Steam grant; a transient CM failure
+            // must not fall back to an unconfirmed request code for a pinned manifest.
             // Without a code every CDN host answers 401, which the engine can only report as an
             // auth failure — skip this depot with the real reason instead of failing the run.
             return DepotResolution.Unavailable(
